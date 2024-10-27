@@ -65,14 +65,14 @@ const Island: React.FC<IslandProps> = ({
     if (event.key === "ArrowLeft") {
       if (!isRotating) setIsRotating(true);
       if (islandRef.current) {
-        islandRef.current.rotation.y += 0.005 * Math.PI;
-        rotationSpeed.current = 0.007;
+        islandRef.current.rotation.y += 0.03 * Math.PI;
+        rotationSpeed.current = 0.0125;
       }
     } else if (event.key === "ArrowRight") {
       if (!isRotating) setIsRotating(true);
       if (islandRef.current) {
-        islandRef.current.rotation.y -= 0.005 * Math.PI;
-        rotationSpeed.current = -0.007;
+        islandRef.current.rotation.y -= 0.03 * Math.PI;
+        rotationSpeed.current = -0.0125;
       }
     }
   };
