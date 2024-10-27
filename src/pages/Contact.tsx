@@ -1,4 +1,4 @@
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import Navbar from "../components/Navbar";
 
 const Contact = () => {
@@ -16,7 +16,10 @@ const Contact = () => {
   };
   const handleFocus = () => {};
   const handleBlur = () => {};
-  const handleSubmit = () => {};
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+  };
   return (
     <>
       <Navbar />
