@@ -12,6 +12,7 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import Projects from "./pages/Projects";
 import Contact from "./pages/Contact";
+import { Toaster } from "sonner";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -26,6 +27,7 @@ const router = createBrowserRouter(
 );
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
+    <Toaster />
     <RouterProvider router={router} />
   </StrictMode>
 );

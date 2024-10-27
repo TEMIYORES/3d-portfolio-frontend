@@ -15,6 +15,12 @@ export interface IslandProps {
   isRotating: boolean;
   setIsRotating: Dispatch<SetStateAction<boolean>>;
 }
+export interface FoxProps {
+  position: Vector3;
+  scale: Vector3;
+  rotation: Vector3;
+  currentAnimation: string;
+}
 
 // Sky Props
 export interface SkyProps {

@@ -8,6 +8,11 @@
   --blue-rgb: 237 245 255;
   --green-rgb: 125 161 35;
 }
+/* Add this custom class in your CSS */
+.h-dynamic {
+  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
+}
 
 body {
   font-family: "Work Sans", sans-serif;
@@ -23,11 +28,11 @@ body:has(.card[data-color="green"]:hover) {
 
 @layer utilities {
   .max-container {
-    @apply max-w-5xl mx-auto sm:p-16 pb-12 !pt-[126px] px-8 min-h-[calc(100vh-80px)];
+    @apply max-w-5xl mx-auto sm:p-16 pb-12 !pt-[120px] px-8;
   }
 
   .head-text {
-    @apply sm:text-5xl text-3xl font-semibold sm:leading-snug font-poppins;
+    @apply sm:text-5xl text-2xl font-semibold sm:leading-snug font-poppins;
   }
 
   .subhead-text {
@@ -109,7 +114,7 @@ body:has(.card[data-color="green"]:hover) {
   transition: 250ms;
   transform-style: preserve-3d;
   transform-origin: bottom right;
-  transform: rotateZ(15deg);
+  transform: rotateZ(10deg);
   will-change: transform;
   box-shadow: 16px 0 40px #e4e4e4;
 }
@@ -148,14 +153,16 @@ body:has(.card[data-color="green"]:hover) {
   z-index: 1;
   width: inherit;
   height: inherit;
-  background-color: #ffffff33;
+  background-color: #ffffff99;
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
+  transform: rotateZ(-10deg);
   transition: 250ms;
   transform-style: preserve-3d;
   transform-origin: top left;
   overflow: hidden;
 }
+
 
 .block-container:hover > .btn-back {
   transform: translateZ(20px) rotateZ(15deg) rotateX(-20deg) rotateY(-20deg);

@@ -13,6 +13,14 @@ const cameraProperties: { near: number; far: number } = {
   far: 1000,
 };
 
+// In your main JavaScript or a useEffect in React
+const setVh = () => {
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty("--vh", `${vh}px`);
+};
+setVh();
+window.addEventListener("resize", setVh);
+
 const Home: React.FC = () => {
   const [isRotating, setIsRotating] = useState<boolean>(false);
   const [rotationSpeed, setRotationSpeed] = useState<number>(1);
@@ -28,7 +36,7 @@ const Home: React.FC = () => {
 
     if (window.innerWidth < 768) {
       screenScale = [0.7, 0.7, 0.7];
-      screenPosition = [0, -4.5, -43.4];
+      screenPosition = [0, -6.5, -43.4];
     } else {
       screenScale = [1, 1, 1];
       screenPosition = [0, -6.5, -43.4];
@@ -48,7 +56,7 @@ const Home: React.FC = () => {
 
     if (window.innerWidth < 768) {
       screenScale = [1, 1, 1];
-      screenPosition = [0, -0.75, 0];
+      screenPosition = [0, -1.5, 0];
     } else {
       screenScale = [3, 3, 3];
       screenPosition = [0, -4, -4];
@@ -65,13 +73,13 @@ const Home: React.FC = () => {
   return (
     <div>
       <Navbar />
-      <section className="w-full h-screen relative">
+      <section className="w-full h-dynamic relative">
         <div className="absolute top-28 left-0 right-0 z-10 flex items-center justify-center">
           {currentStage && <HomeInfo currentStage={currentStage} />}
         </div>
         <Canvas
           camera={cameraProperties}
-          className={`w-full h-screen bg-transparent ${
+          className={`w-full h-dynamic bg-transparent ${
             isRotating ? "cursor-grabbing" : "cursor-grab"
           }`}
         >
