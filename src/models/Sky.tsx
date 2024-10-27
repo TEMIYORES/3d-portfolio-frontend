@@ -1,13 +1,14 @@
 import { useGLTF } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
+import * as THREE from "three";
 import skyScene from "../assets/3d/sky.glb";
 interface PropsType {
   isRotating: boolean;
   rotationSpeed: number;
 }
 const Sky: React.FC<PropsType> = ({ isRotating, rotationSpeed, ...props }) => {
-  const skyRef = useRef();
+  const skyRef = useRef<THREE.Mesh>(null);
   const sky = useGLTF(skyScene);
 
   useFrame((_, delta) => {

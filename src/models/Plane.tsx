@@ -1,25 +1,23 @@
 import { useAnimations, useGLTF } from "@react-three/drei";
-import React, { useEffect, useRef } from "react";
-import planeScreen from "../assets/3d/plane.glb";
 import { useFrame } from "@react-three/fiber";
-interface PropsType {
-  isRotating: boolean;
-  props: any;
-  rotationSpeed: number;
-}
-const Plane: React.FC<PropsType> = ({
+import React, { useRef } from "react";
+import * as THREE from "three";
+import planeScreen from "../assets/3d/plane.glb";
+import { PlaneProps } from "./types";
+
+const Plane: React.FC<PlaneProps> = ({
   isRotating,
   rotationSpeed,
   ...props
 }) => {
-  const ref = useRef();
+  const planeRef = useRef<THREE.Mesh>(null);
   const { scene, animations } = useGLTF(planeScreen);
-  const { actions } = useAnimations(animations, ref);
+  const { actions } = useAnimations(animations, planeRef);
   useFrame(() => {
     actions["Take 001"]?.play();
   });
   return (
-    <mesh {...props} ref={ref}>
+    <mesh {...props} ref={planeRef}>
       <primitive object={scene} />
     </mesh>
   );

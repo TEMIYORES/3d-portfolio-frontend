@@ -5,48 +5,46 @@ License: CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
 Source: https://sketchfab.com/3d-models/foxs-islands-163b68e09fcc47618450150be7785907
 Title: Fox's islands
 */
-import React, { useRef, useEffect, Ref } from "react";
+import { a } from "@react-spring/three";
 import { useGLTF } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
+import React, { useEffect, useRef } from "react";
 import islandScene from "../assets/3d/island.glb";
-import { a } from "@react-spring/three";
+import * as THREE from "three";
+import { IslandProps } from "./types";
 
-interface PropsType {
-  isRotating: boolean;
-  setIsRotating: React.Dispatch<React.SetStateAction<boolean>>;
-  setCurrentStage: React.Dispatch<React.SetStateAction<number>>;
-}
-const Island: React.FC<PropsType> = ({
+const Island: React.FC<IslandProps> = ({
   isRotating,
   setIsRotating,
-  setRationSpeed,
+  setRotationSpeed,
   setCurrentStage,
   ...props
 }) => {
   const { gl, viewport } = useThree();
-  const { nodes, materials } = useGLTF(islandScene);
-  const islandRef = useRef();
+  const { nodes, materials } = useGLTF(islandScene) as any;
+  const islandRef = useRef<THREE.Group>(null);
   const lastX = useRef(0);
   const rotationSpeed = useRef(0);
   const dampingFactor = 0.95;
 
-  const handlePointerDown = (e) => {
+  const handlePointerDown = (e: PointerEvent | TouchEvent) => {
     e.stopPropagation();
     e.preventDefault();
     setIsRotating(true);
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
     lastX.current = clientX;
   };
-  const handlePointerUp = (e) => {
+
+  const handlePointerUp = (e: PointerEvent) => {
     e.stopPropagation();
     e.preventDefault();
     setIsRotating(false);
   };
-  const handlePointerMove = (e) => {
+  const handlePointerMove = (e: PointerEvent | TouchEvent) => {
     e.stopPropagation();
     e.preventDefault();
     if (isRotating) {
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
       // calculate the change in the horizontal position of the mouse cursor or touch input,
       // relative to the viewport's width
       const delta = (clientX - lastX.current) / viewport.width;
@@ -63,21 +61,23 @@ const Island: React.FC<PropsType> = ({
       rotationSpeed.current = delta * 0.01 * Math.PI;
     }
   };
-  const handleKeyDown = (event) => {
+  const handleKeyDown = (event: KeyboardEvent) => {
     if (event.key === "ArrowLeft") {
       if (!isRotating) setIsRotating(true);
-
-      islandRef.current.rotation.y += 0.005 * Math.PI;
-      rotationSpeed.current = 0.007;
+      if (islandRef.current) {
+        islandRef.current.rotation.y += 0.005 * Math.PI;
+        rotationSpeed.current = 0.007;
+      }
     } else if (event.key === "ArrowRight") {
       if (!isRotating) setIsRotating(true);
-
-      islandRef.current.rotation.y -= 0.005 * Math.PI;
-      rotationSpeed.current = -0.007;
+      if (islandRef.current) {
+        islandRef.current.rotation.y -= 0.005 * Math.PI;
+        rotationSpeed.current = -0.007;
+      }
     }
   };
   // Handle keyup events
-  const handleKeyUp = (event) => {
+  const handleKeyUp = (event: KeyboardEvent) => {
     if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
       setIsRotating(false);
     }
@@ -87,14 +87,14 @@ const Island: React.FC<PropsType> = ({
       rotationSpeed.current *= dampingFactor;
       if (Math.abs(rotationSpeed.current) < 0.001) {
         rotationSpeed.current = 0;
-        setRationSpeed(0);
+        setRotationSpeed(0);
       }
       if (islandRef.current) {
         islandRef.current.rotation.y += rotationSpeed.current;
-        setRationSpeed(rotationSpeed.current);
+        setRotationSpeed(rotationSpeed.current);
       }
     } else {
-      const rotation = islandRef?.current?.rotation.y;
+      const rotation = islandRef?.current?.rotation.y || 0;
       /**
        * Normalize the rotation value to ensure it stays within the range [0, 2 * Math.PI].
        * The goal is to ensure that the rotation value remains within a specific range to

@@ -1,23 +1,31 @@
-import { Suspense, useState } from "react";
-import Navbar from "../components/Navbar";
 import { Canvas } from "@react-three/fiber";
+import React, { Suspense, useState } from "react";
+import HomeInfo from "../components/HomeInfo";
 import Loader from "../components/Loader";
-import Island from "../models/island";
-import Sky from "../models/Sky";
+import Navbar from "../components/Navbar";
 import Bird from "../models/Bird";
 import Plane from "../models/Plane";
-import HomeInfo from "../components/HomeInfo";
-const cameraPoperties = {
+import Sky from "../models/Sky";
+import Island from "../models/Island";
+
+const cameraProperties: { near: number; far: number } = {
   near: 1,
   far: 1000,
 };
-const Home = () => {
-  const [isRotating, setIsRotating] = useState(false);
-  const [rationSpeed, setRationSpeed] = useState(1);
 
-  const adjustIslandForScreenSize = () => {
-    let screenScale, screenPosition;
-    let screenRotation = [0.1, 4.7077, 0];
+const Home: React.FC = () => {
+  const [isRotating, setIsRotating] = useState<boolean>(false);
+  const [rotationSpeed, setRotationSpeed] = useState<number>(1);
+
+  const adjustIslandForScreenSize = (): [
+    [number, number, number],
+    [number, number, number],
+    [number, number, number]
+  ] => {
+    let screenScale: [number, number, number];
+    let screenPosition: [number, number, number];
+    let screenRotation: [number, number, number] = [0.1, 4.7077, 0];
+
     if (window.innerWidth < 768) {
       screenScale = [0.7, 0.7, 0.7];
       screenPosition = [0, -4.5, -43.4];
@@ -29,9 +37,14 @@ const Home = () => {
     return [screenScale, screenPosition, screenRotation];
   };
 
-  const adjustPlaneForScreenSize = () => {
-    let screenScale, screenPosition;
-    let screenRotation = [0, 20.5, 0];
+  const adjustPlaneForScreenSize = (): [
+    [number, number, number],
+    [number, number, number],
+    [number, number, number]
+  ] => {
+    let screenScale: [number, number, number];
+    let screenPosition: [number, number, number];
+    let screenRotation: [number, number, number] = [0, 20.5, 0];
 
     if (window.innerWidth < 768) {
       screenScale = [1, 1, 1];
@@ -46,8 +59,9 @@ const Home = () => {
 
   const [islandScale, islandPosition, islandRotation] =
     adjustIslandForScreenSize();
-  const [currentStage, setCurrentStage] = useState(1);
+  const [currentStage, setCurrentStage] = useState<number | null>(1);
   const [planeScale, planePosition, planeRotation] = adjustPlaneForScreenSize();
+
   return (
     <div>
       <Navbar />
@@ -56,7 +70,7 @@ const Home = () => {
           {currentStage && <HomeInfo currentStage={currentStage} />}
         </div>
         <Canvas
-          camera={cameraPoperties}
+          camera={cameraProperties}
           className={`w-full h-screen bg-transparent ${
             isRotating ? "cursor-grabbing" : "cursor-grab"
           }`}
@@ -64,20 +78,14 @@ const Home = () => {
           <Suspense fallback={<Loader />}>
             <directionalLight position={[1, 1, 1]} intensity={2} />
             <ambientLight intensity={0.5} />
-            {/* <pointLight />
-            <spotLight /> */}
-            <hemisphereLight
-              skyColor={"#b1e1ff"}
-              groundColor={"#000000"}
-              intensity={1}
-            />
+            <hemisphereLight groundColor={"#000000"} intensity={1} />
             <Bird />
-            <Sky isRotating={isRotating} rotationSpeed={rationSpeed} />
+            <Sky isRotating={isRotating} rotationSpeed={rotationSpeed} />
             <Island
               position={islandPosition}
               scale={islandScale}
               rotation={islandRotation}
-              setRationSpeed={setRationSpeed}
+              setRotationSpeed={setRotationSpeed}
               setCurrentStage={setCurrentStage}
               isRotating={isRotating}
               setIsRotating={setIsRotating}
@@ -85,7 +93,7 @@ const Home = () => {
             <Plane
               isRotating={isRotating}
               scale={planeScale}
-              rotationSpeed={rationSpeed}
+              rotationSpeed={rotationSpeed}
               position={planePosition}
               rotation={planeRotation}
             />
