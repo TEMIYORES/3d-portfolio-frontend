@@ -62,7 +62,7 @@ const About = () => {
                   key={experience.company_name}
                   date={experience.date}
                   icon={
-                    <div>
+                    <div className="flex items-center justify-center">
                       <img
                         src={experience.icon}
                         alt={experience.company_name}
